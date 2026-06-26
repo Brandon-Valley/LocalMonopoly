@@ -117,13 +117,16 @@
 
 
     .github-corner-button {
-      width: 40px;
-      height: 40px;
+      position: fixed;
+      top: max(10px, env(safe-area-inset-top));
+      right: max(10px, env(safe-area-inset-right));
+      z-index: 999999;
+      width: 44px;
+      height: 44px;
       border-radius: 999px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      flex: 0 0 auto;
       color: #ffffff;
       background: #172033;
       border: 1px solid rgba(23, 32, 51, 0.16);

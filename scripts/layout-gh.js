@@ -1,0 +1,14 @@
+const fs = require('fs');
+const p = 'index.html';
+let s = fs.readFileSync(p, 'utf8');
+s = s.replace('      position: fixed;\n      top: calc(var(--top) + 12px);\n      right: 14px;\n      z-index: 999999;\n      width: 58px;\n      height: 58px;', '      width: 34px;\n      height: 34px;\n      min-height: 34px;');
+s = s.replace('      border: 1px solid rgba(23, 32, 51, 0.16);\n      box-shadow: 0 8px 16px rgba(23, 32, 51, 0.18);', '      border: 1px solid var(--line);\n      box-shadow: none;\n      text-decoration: none;');
+s = s.replace('      width: 38px;\n      height: 38px;', '      width: 24px;\n      height: 24px;');
+s = s.replace(' style="position:fixed!important;top:78px!important;right:14px!important;z-index:999999!important;width:58px!important;height:58px!important;border-radius:999px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;"', '');
+s = s.replace(' style="width:38px!important;height:38px!important;display:block!important;"', '');
+const aStart = s.indexOf('        <a class="github-corner-button"');
+const aEnd = s.indexOf('        </a>', aStart) + '        </a>'.length;
+const anchor = s.slice(aStart, aEnd);
+s = s.slice(0, aStart) + s.slice(aEnd);
+s = s.replace('        <button class="top-log-btn" id="restartTopBtn" type="button">Restart</button>', '        <button class="top-log-btn" id="restartTopBtn" type="button">Restart</button>\n' + anchor);
+fs.writeFileSync(p, s, 'utf8');

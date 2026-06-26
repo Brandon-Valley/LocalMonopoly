@@ -6557,7 +6557,7 @@
       geometry.computeBoundingSphere();
     }
 
-    const TERRAIN_BONE_DEMO_SOURCE = "assets/terrain-bone-demo-source.png.b64";
+    const TERRAIN_BONE_DEMO_SOURCE = "assets/terrain-bone-demo-source.png";
     const TERRAIN_BONE_DEMO_BG = [58, 39, 21];
     const TERRAIN_BONE_DEMO_SPRITES = {
       demo02: { sx: 390, sy: 58, sw: 250, sh: 197, aspect: 250 / 197, maxW: 1.02 },
@@ -6631,11 +6631,12 @@
     terrainBoneDemoImage.onload = function () {
       terrainBoneDemoReady = true;
       for (const entry of terrainBoneDemoPending) drawTerrainBoneDemoSprite(entry);
+      if (threeBoard.active) renderThreeBoard();
     };
     terrainBoneDemoImage.onerror = function () {
       console.warn("Terrain bone demo image failed to load.");
     };
-    if (TERRAIN_BONE_DEMO_SOURCE.indexOf("data:") === 0) {
+    if (TERRAIN_BONE_DEMO_SOURCE.indexOf("data:") === 0 || !/\.b64(?:[?#]|$)/i.test(TERRAIN_BONE_DEMO_SOURCE)) {
       terrainBoneDemoImage.src = TERRAIN_BONE_DEMO_SOURCE;
     } else {
       fetch(TERRAIN_BONE_DEMO_SOURCE)

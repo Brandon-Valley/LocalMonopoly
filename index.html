@@ -963,6 +963,24 @@
     }
 
 
+
+
+    /* Keep the GitHub button available before a board is chosen. */
+    body:not(.board-built) #topActions {
+      display: flex !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+
+    body:not(.board-built) #logsHudBtn,
+    body:not(.board-built) #restartTopBtn {
+      display: none !important;
+    }
+
+    body:not(.board-built) #topActions .github-corner-button {
+      display: inline-flex !important;
+    }
+
     .top-actions:empty {
       display: none;
     }

@@ -1,0 +1,24 @@
+name: Inline GitHub button style
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - .github/workflows/zz-inline-button-style.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/inline-github-button-style.js
+      - run: rm -f scripts/inline-github-button-style.js .github/workflows/zz-inline-button-style.yml
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Inline GitHub button placement
+          file_pattern: index.html scripts/inline-github-button-style.js .github/workflows/zz-inline-button-style.yml

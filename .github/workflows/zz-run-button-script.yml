@@ -1,0 +1,24 @@
+name: Run GitHub button patch script
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - .github/workflows/zz-run-button-script.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/add-github-button.js
+      - run: rm -f scripts/add-github-button.js .github/workflows/zz-run-button-script.yml
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Add GitHub repo button
+          file_pattern: index.html scripts/add-github-button.js .github/workflows/zz-run-button-script.yml

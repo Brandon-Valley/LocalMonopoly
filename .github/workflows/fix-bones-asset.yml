@@ -1,0 +1,70 @@
+name: Fix bones asset path
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix-bones-asset:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - name: Patch index.html to load PNG asset directly
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+
+          path = Path('index.html')
+          text = path.read_text()
+
+          old_source = 'const TERRAIN_BONE_DEMO_SOURCE = "assets/terrain-bone-demo-source.png.b64";'
+          new_source = 'const TERRAIN_BONE_DEMO_SOURCE = "assets/terrain-bone-demo-source.png";'
+          if old_source in text:
+              text = text.replace(old_source, new_source, 1)
+
+          old_loader = '''    if (TERRAIN_BONE_DEMO_SOURCE.indexOf("data:") === 0) {
+      terrainBoneDemoImage.src = TERRAIN_BONE_DEMO_SOURCE;
+    } else {
+      fetch(TERRAIN_BONE_DEMO_SOURCE)
+        .then(function (response) {
+          if (!response.ok) throw new Error("HTTP " + response.status);
+          return response.text();
+        })
+        .then(function (sourceText) {
+          terrainBoneDemoImage.src = "data:image/png;base64," + sourceText.trim();
+        })
+        .catch(function (error) {
+          console.warn("Terrain bone demo image failed to load.", error);
+        });
+    }'''
+          new_loader = '''    terrainBoneDemoImage.src = TERRAIN_BONE_DEMO_SOURCE;'''
+          if old_loader in text:
+              text = text.replace(old_loader, new_loader, 1)
+
+          path.write_text(text)
+
+          workflow = Path('.github/workflows/fix-bones-asset.yml')
+          if workflow.exists():
+              workflow.unlink()
+          PY
+
+      - name: Commit fix if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet; then
+            echo "No changes needed."
+          else
+            git add index.html .github/workflows/fix-bones-asset.yml
+            git commit -m "Fix bones asset loading"
+            git push origin master
+          fi

@@ -118,11 +118,11 @@
 
     .github-corner-button {
       position: fixed;
-      top: max(10px, env(safe-area-inset-top));
-      right: max(10px, env(safe-area-inset-right));
+      top: calc(var(--top) + 12px);
+      right: 14px;
       z-index: 999999;
-      width: 44px;
-      height: 44px;
+      width: 58px;
+      height: 58px;
       border-radius: 999px;
       display: inline-flex;
       align-items: center;
@@ -150,8 +150,8 @@
     }
 
     .github-corner-button svg {
-      width: 22px;
-      height: 22px;
+      width: 38px;
+      height: 38px;
       display: block;
       fill: currentColor;
     }

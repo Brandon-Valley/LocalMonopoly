@@ -1,0 +1,24 @@
+name: Style link update
+
+on:
+  push:
+    branches:
+      - gh-pages
+    paths:
+      - .github/workflows/zz-style-link.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/link-button-fix-css.js
+      - run: rm -f scripts/link-button-fix-css.js .github/workflows/zz-style-link.yml
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Update header style link
+          file_pattern: index.html scripts/link-button-fix-css.js .github/workflows/zz-style-link.yml

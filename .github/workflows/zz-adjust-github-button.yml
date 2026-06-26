@@ -1,0 +1,24 @@
+name: Adjust GitHub button
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - .github/workflows/zz-adjust-github-button.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/adjust-github-button.js
+      - run: rm -f scripts/adjust-github-button.js .github/workflows/zz-adjust-github-button.yml
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Adjust GitHub button placement
+          file_pattern: index.html scripts/adjust-github-button.js .github/workflows/zz-adjust-github-button.yml

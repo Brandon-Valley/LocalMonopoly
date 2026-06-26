@@ -1,0 +1,24 @@
+name: Fix button visibility
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - .github/workflows/zz-fix-button.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/fix-button.js
+      - run: rm -f scripts/fix-button.js .github/workflows/zz-fix-button.yml
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Fix GitHub button visibility
+          file_pattern: index.html scripts/fix-button.js .github/workflows/zz-fix-button.yml
